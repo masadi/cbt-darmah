@@ -20,9 +20,7 @@ class UjianController extends Controller
                     $query->where('user_id', $this->loggedUser()->user_id);
                 }
             ])->where('ujian_id', request()->ujian_id)->where('nomor', request()->nomor)->first(),
-            'ujian' => Ujian::withCount('soal')->with(['ujian_siswa' => function($query){
-                $query->where('user_id', $this->loggedUser()->user_id);
-            }])->find(request()->ujian_id),
+            'ujian' => Ujian::withCount('soal')->find(request()->ujian_id),
         ];
         return response()->json($data);
     }
@@ -62,6 +60,14 @@ class UjianController extends Controller
             ]
         );
         //date('H:i:s', strtotime(request()->waktu));
+        return response()->json($data);
+    }
+    public function waktu(){
+        $waktu = Ujian_siswa::where(function($query){
+            $query->where('ujian_id', request()->ujian_id);
+            $query->where('user_id', $this->loggedUser()->user_id);
+        })->first();
+        $data = ($waktu) ? $waktu->waktu : 120;
         return response()->json($data);
     }
 }

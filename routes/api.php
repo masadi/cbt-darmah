@@ -20,10 +20,6 @@ Route::get('no-access', [DashboardController::class, 'no_access'])->name('login'
 Route::group(['prefix' => 'peta'], function () {
   Route::get('/', [PetaController::class, 'index']);
 });
-Route::group(['prefix' => 'general'], function () {
-  Route::get('/index', [ApiController::class, 'index']);
-  Route::get('/chart', [ApiController::class, 'chart']);
-});
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('login-by-token', [AuthController::class, 'login_by_token']);
@@ -35,6 +31,10 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 Route::group(['middleware' => 'auth:sanctum'], function () {
+  Route::group(['prefix' => 'general'], function () {
+    Route::get('/index', [ApiController::class, 'index']);
+    Route::get('/chart', [ApiController::class, 'chart']);
+  });
   Route::group(['prefix' => 'ujian'], function () {
     Route::post('index', [UjianController::class, 'index']);
     Route::post('simpan', [UjianController::class, 'simpan']);

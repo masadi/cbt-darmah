@@ -36,25 +36,55 @@ const router = new VueRouter({
       },
     },
     {
+      path: '/login',
+      name: 'auth-login',
+      component: () => import('@/views/pages/Login.vue'),
+      meta: {
+        layout: 'full',
+        resource: 'Auth',
+        redirectIfLoggedIn: true,
+      },
+    },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: () => import('@/views/dashboard/utama/Index.vue'),
+      meta: {
+        resource: 'Web',
+        action: 'read',
+      }
+    },
+    {
       path: '/ujian/:ujian_id',
       name: 'ujian',
       component: () => import('@/views/Ujian/Index.vue'),
       meta: {
         layout: 'horizontal',
-        resource: 'Siswa',
+        resource: 'Web',
         action: 'read',
       }
     },
     {
-      path: '/progress-data',
-      name: 'progress-data',
-      component: () => import('@/views/beranda/ProgresData.vue'),
+      path: '/profile',
+      name: 'profile',
+      component: () => import('@/views/pages/Profile.vue'),
       meta: {
-        layout: 'horizontal',
+        resource: 'Web',
+        action: 'read',
       }
     },
-    ...dashboard,
-    ...pages,
+    {
+      path: '/error-404',
+      name: 'error-404',
+      component: () => import('@/views/error/Error404.vue'),
+      meta: {
+        layout: 'full',
+        resource: 'Auth',
+        action: 'read',
+      },
+    },
+    //...dashboard,
+    //...pages,
     {
       path: '*',
       redirect: 'error-404',
