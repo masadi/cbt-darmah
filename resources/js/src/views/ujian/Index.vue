@@ -71,25 +71,6 @@ export default {
     }
   },
   created() {
-    //console.log('created');
-    //console.log(this.$route.params);
-    this.selected = ''
-    this.ragu = false
-    this.button_ragu = 'secondary'
-    /*var today = new Date();
-    //var d = new Date(today.setHours(today.getHours() + 2));
-    var d = this.addMinutes(today, 120)
-    let month = months[d.getMonth()];
-    let day = d.getDate();
-    let year = d.getFullYear();
-    let h = d.getHours();
-    let i = d.getMinutes();
-    let s = d.getSeconds();
-    //console.log(today);
-    //console.log(d);
-    console.log(d);
-    this.yourEndDate = this.setDate(d)
-    //month+' '+day+', '+ year+' '+h+':'+i+':'+s//'August 22, 2023 12:22:12'*/
     this.getwaktu(this.$route.params.ujian_id)
     this.getSoal(this.$route.params.ujian_id, this.$route.query.nomor, false)
   },
@@ -117,6 +98,9 @@ export default {
       return month+' '+day+', '+ year+' '+h+':'+i+':'+s
     },
     getSoal(ujian_id, nomor, replace){
+      this.selected = ''
+      this.ragu = false
+      this.button_ragu = 'secondary'
       this.$http.post('/ujian/index', {
         ujian_id: ujian_id,
         nomor: nomor,
