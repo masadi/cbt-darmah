@@ -6,7 +6,7 @@
       <b-link class="brand-logo">
         <vuexy-logo />
         <h2 class="brand-text text-dark ml-1">
-          SIMAZAH
+          CBT Darul Karomah
         </h2>
       </b-link>
       <!-- /Brand logo-->
@@ -81,16 +81,6 @@
               </b-button>
             </b-form>
           </validation-observer>
-          <div class="divider my-2">
-            <div class="divider-text">
-              Atau
-            </div>
-          </div>
-          <div class="auth-footer-btn d-flex justify-content-center">
-            <b-button variant="warning" block @click="redirectSSO">
-              SSO DAPODIK
-            </b-button>
-          </div>
         </b-col>
       </b-col>
       <!-- /Login-->
