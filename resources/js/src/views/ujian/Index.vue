@@ -15,10 +15,10 @@
       <b-col cols="8">
         <b-card>
           <b-card-text>
-            <h5 v-html="data.deskripsi"></h5>
-            <b-form-group v-slot="{ ariaDescribedby }">
+            <h4 v-html="data.deskripsi"></h4>
+            <b-form-group v-slot="{ ariaDescribedby }" class="mt-2">
               <template v-for="(jawaban, index) in data.jawaban">
-                <b-form-radio v-model="selected" :aria-describedby="ariaDescribedby" name="some-radios" :value="jawaban.opsi"><h5 v-html="jawaban.deskripsi"></h5></b-form-radio>
+                <b-form-radio v-model="selected" :aria-describedby="ariaDescribedby" name="some-radios" :value="jawaban.opsi" class="mb-1"><h4 v-html="jawaban.deskripsi"></h4></b-form-radio>
               </template>
             </b-form-group>
             <b-row>
@@ -32,7 +32,7 @@
                 </b-form-checkbox>
               </b-col>
               <b-col lg="4" class="text-right">
-                <b-button v-if="nomor == jumlah_soal" variant="danger">Selesai</b-button>
+                <b-button v-if="nomor == jumlah_soal" variant="danger" @click="selesai">Selesai</b-button>
                 <b-button v-else @click="lanjut(data.soal_id, nomor, 'next')" variant="success">Selanjutnya &raquo;</b-button>
               </b-col>
             </b-row>
@@ -75,6 +75,39 @@ export default {
     this.getSoal(this.$route.params.ujian_id, this.$route.query.nomor, false)
   },
   methods: {
+    selesai(){
+      this.$swal({
+        title: 'Apakah Anda yakin?',
+        text: 'Aksi ini akan mengakhiri sesi ujian',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yakin!',
+        customClass: {
+          confirmButton: 'btn btn-primary',
+          cancelButton: 'btn btn-outline-danger ml-1',
+        },
+        buttonsStyling: false,
+        allowOutsideClick: () => !this.$swal.isLoading(),
+      }).then(result => {
+        if (result.value) {
+          this.$http.post('/ujian/selesai', {
+            ujian_id: this.$route.params.ujian_id,
+          }).then(response => {
+            let data = response.data
+            this.$swal({
+              icon: data.icon,
+              title: data.title,
+              text: data.text,
+              customClass: {
+                confirmButton: 'btn btn-success',
+              },
+            }).then(result => {
+              this.$router.replace('/')
+            })
+          });
+        }
+      })
+    },
     getwaktu(ujian_id){
       this.$http.post('/ujian/waktu', {
         ujian_id: ujian_id,
@@ -159,3 +192,6 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+@import '~@resources/scss/vue/libs/vue-sweetalert.scss';
+</style>

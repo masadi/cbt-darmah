@@ -33,12 +33,12 @@ Route::group(['prefix' => 'auth'], function () {
 Route::group(['middleware' => 'auth:sanctum'], function () {
   Route::group(['prefix' => 'general'], function () {
     Route::get('/index', [ApiController::class, 'index']);
-    Route::get('/chart', [ApiController::class, 'chart']);
   });
   Route::group(['prefix' => 'ujian'], function () {
     Route::post('index', [UjianController::class, 'index']);
     Route::post('simpan', [UjianController::class, 'simpan']);
     Route::post('waktu', [UjianController::class, 'waktu']);
+    Route::post('selesai', [UjianController::class, 'selesai']);
   });
   Route::group(['prefix' => 'dashboard'], function () {
     Route::get('index', [DashboardController::class, 'index']);

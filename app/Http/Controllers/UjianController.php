@@ -70,4 +70,24 @@ class UjianController extends Controller
         $data = ($waktu) ? $waktu->waktu : 120;
         return response()->json($data);
     }
+    public function selesai(){
+        $insert = Ujian_siswa::where(function($query){
+            $query->where('ujian_id', request()->ujian_id);
+            $query->where('user_id', $this->loggedUser()->user_id);
+        })->update(['status' => 1]);
+        if($insert){
+            $data = [
+                'icon' => 'success',
+                'title' => 'Berhasil!',
+                'text' => 'Ujian berhasil disimpan',
+            ];
+        } else {
+            $data = [
+                'icon' => 'error',
+                'title' => 'Gagal!',
+                'text' => 'Ujian gagal disimpan. Silahkan coba beberapa saat lagi!',
+            ];
+        }
+        return response()->json($data);
+    }
 }

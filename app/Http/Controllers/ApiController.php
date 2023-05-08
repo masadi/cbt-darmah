@@ -14,11 +14,18 @@ class ApiController extends Controller
             'rombel' => Rombongan_belajar::whereHas('anggota_rombel', function($query){
                 $query->where('peserta_didik_id', $this->loggedUser()->peserta_didik_id);
             })->first(),
-            'ujian' => Ujian::withCount(['soal', 'jawaban_siswa' => function($query){
+            'ujian' => Ujian::withCount([
+                'soal', 
+                'jawaban_siswa' => function($query){
                 $query->whereHas('user', function($query){
                     $query->where('peserta_didik_id', $this->loggedUser()->peserta_didik_id);
                 });
-            }])->with(['pembelajaran'])->whereHas('pembelajaran', function($query){
+            }])->with([
+                'pembelajaran',
+                'ujian_siswa' => function($query){
+                    $query->where('user_id', $this->loggedUser()->user_id);
+                },
+            ])->whereHas('pembelajaran', function($query){
                 $query->whereHas('rombongan_belajar', function($query){
                     $query->whereHas('anggota_rombel', function($query){
                         $query->where('peserta_didik_id', $this->loggedUser()->peserta_didik_id);
