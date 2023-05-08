@@ -67,7 +67,15 @@ class UjianController extends Controller
             $query->where('ujian_id', request()->ujian_id);
             $query->where('user_id', $this->loggedUser()->user_id);
         })->first();
-        $data = ($waktu) ? $waktu->waktu : 120;
+        $ujian = Ujian::withCount('soal')->find(request()->ujian_id);
+        $jumlah_soal = [];
+        for($i=1;$i<=$ujian->soal_count;$i++){
+            $jumlah_soal[] = $i;
+        }
+        $data = [
+            'waktu' => ($waktu) ? $waktu->waktu : 120,
+            'jumlah_soal' => $jumlah_soal,
+        ];
         return response()->json($data);
     }
     public function selesai(){

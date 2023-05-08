@@ -42,7 +42,22 @@
       <b-col cols="4">
         <b-card>
           <b-card-text>
-            navigasi
+            <template v-for="chunk in chunked()">
+              <b-row class="mb-1">
+                <template v-for="article in chunk">
+                  <b-col>
+                    <b-button block variant="success" @click="lanjutNav(article)">{{article}}</b-button>
+                  </b-col>
+                </template>
+              </b-row>
+            </template>
+            <!--template v-for="(group, i) in articleGroups">
+              <b-row class="mb-1">
+                <b-col v-for="(article, index) in jumlah_soal.slice(i * itemsPerRow, (i + 1) * itemsPerRow)">
+                  <b-button block variant="success">{{index + i}}</b-button>
+                </b-col>
+              </b-row>
+            </template-->
           </b-card-text>
         </b-card>
       </b-col>
@@ -51,6 +66,7 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import Countdown from './Countdown.vue'
 import { BCard, BCardText, BRow, BCol, BSpinner, BTable, BBadge, BButton, BFormGroup, BFormRadio, BFormCheckbox } from 'bootstrap-vue'
 export default {
@@ -66,8 +82,11 @@ export default {
       button_ragu: 'secondary',
       nomor: 0,
       ujian_id: '',
+      soal_id: null,
       jumlah_soal: 0,
       yourEndDate: 0,
+      itemsPerRow: 5,
+      all_soal: [],
     }
   },
   created() {
@@ -115,10 +134,14 @@ export default {
         let getData = response.data
         if(getData){
           var today = new Date();
-          var d = this.addMinutes(today, getData)
+          var d = this.addMinutes(today, getData.waktu)
           this.yourEndDate = this.setDate(d)
+          this.all_soal = getData.jumlah_soal
         }
       })
+    },
+    chunked () {
+      return _.chunk(this.all_soal, this.itemsPerRow)
     },
     setDate(d){
       const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
@@ -143,6 +166,7 @@ export default {
         this.data = getData.soal
         this.nomor = nomor
         this.ujian_id = ujian_id
+        this.soal_id = getData.soal.soal_id
         this.jumlah_soal = getData.ujian.soal_count
         if(getData.soal.jawaban_siswa){
           console.log(getData.soal.jawaban_siswa.is_ragu);
@@ -158,6 +182,18 @@ export default {
         if(replace){
           this.$router.replace({ name: "ujian", params: {ujian_id:this.$route.params.ujian_id}, query: {nomor: nomor} })
         }
+      })
+    },
+    lanjutNav(nomor_ujian){
+      this.isBusy = true
+      this.$http.post('/ujian/simpan', {
+        ujian_id: this.ujian_id,
+        soal_id: this.soal_id,
+        jawaban: this.selected,
+        ragu: this.ragu,
+        waktu: this.yourEndDate,
+      }).then(response => {
+        this.getSoal(this.$route.params.ujian_id, nomor_ujian, true)
       })
     },
     lanjut(soal_id, nomor, nav){
