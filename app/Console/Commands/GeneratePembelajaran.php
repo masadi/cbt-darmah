@@ -48,7 +48,12 @@ class GeneratePembelajaran extends Command
                 'pembelajaran' => [
                     [
                         'mata_pelajaran_id' => 1,
-                        'nama_mata_pelajaran' => 'Ilmu Pengetahuan Sosial',
+                        'nama_mata_pelajaran' => 'Ilmu Pengetahuan Sosial (IPS)',
+                        'nuptk' => '5046766667200003',
+                    ],
+                    [
+                        'mata_pelajaran_id' => 2,
+                        'nama_mata_pelajaran' => 'Pendidikan Kewarganegaraan (PKn)',
                         'nuptk' => '5046766667200003',
                     ]
                 ],
@@ -61,16 +66,24 @@ class GeneratePembelajaran extends Command
             ]);
             foreach($d['pembelajaran'] as $pembelajaran){
                 $guru = Guru::where('nuptk', '5046766667200003')->first();
-                Mata_pelajaran::updateOrcreate([
-                    'mata_pelajaran_id' => $pembelajaran['mata_pelajaran_id'],
-                    'nama' => $pembelajaran['nama_mata_pelajaran'],
-                ]);
-                Pembelajaran::updateOrcreate([
-                    'rombongan_belajar_id' => $rombel->rombongan_belajar_id,
-                    'mata_pelajaran_id' => $pembelajaran['mata_pelajaran_id'],
-                    'nama_mata_pelajaran' => $pembelajaran['nama_mata_pelajaran'],
-                    'guru_id' => $guru->guru_id,
-                ]);
+                Mata_pelajaran::updateOrcreate(
+                    [
+                        'mata_pelajaran_id' => $pembelajaran['mata_pelajaran_id'],
+                    ],
+                    [
+                        'nama' => $pembelajaran['nama_mata_pelajaran'],
+                    ]
+                );
+                Pembelajaran::updateOrcreate(
+                    [
+                        'rombongan_belajar_id' => $rombel->rombongan_belajar_id,
+                        'mata_pelajaran_id' => $pembelajaran['mata_pelajaran_id'],
+                        'guru_id' => $guru->guru_id,
+                    ],
+                    [
+                        'nama_mata_pelajaran' => $pembelajaran['nama_mata_pelajaran'],
+                    ]
+                );
             }
         }
     }
