@@ -28,7 +28,10 @@
                 {{row.item.pembelajaran.nama_mata_pelajaran}}
               </template>
               <template v-slot:cell(status_ujian)="row">
-                <template v-if="row.item.ujian_siswa">
+                <template v-if="!row.item.soal_count">
+                  <b-badge variant="secondary">Soal belum tersedia</b-badge>
+                </template>
+                <template v-else-if="row.item.ujian_siswa">
                   <b-badge variant="success" v-if="row.item.ujian_siswa.status">Selesai</b-badge>
                   <b-badge variant="warning" v-else>Sedang Berjalan</b-badge>
                 </template>
@@ -39,12 +42,20 @@
                 </template>
               </template>
               <template v-slot:cell(status)="row">
-                <b-badge variant="success" v-if="row.item.status">YA</b-badge>
-                <b-badge variant="danger" v-else>TIDAK</b-badge>
+                <template v-if="!row.item.soal_count">
+                  <b-badge variant="secondary">TIDAK</b-badge>
+                </template>
+                <template v-else>
+                  <b-badge variant="success" v-if="row.item.status">YA</b-badge>
+                  <b-badge variant="danger" v-else>TIDAK</b-badge>
+                </template>
               </template>
               <template v-slot:cell(actions)="row">
-                <b-button variant="success" size="sm" v-if="row.item.status" @click="ujian(row.item)">Proses Ujian</b-button>
-                <template v-if="row.item.ujian_siswa">
+                <template v-if="!row.item.soal_count">
+                  <b-badge variant="secondary">Proses Ujian</b-badge>
+                </template>
+                <!--b-button variant="success" size="sm" v-if="row.item.status" @click="ujian(row.item)">Proses Ujian</b-button-->
+                <template v-else-if="row.item.ujian_siswa">
                   <b-button variant="secondary" disabled size="sm" v-if="row.item.ujian_siswa.status">Ujian Selesai</b-button>
                   <b-button variant="warning" size="sm" v-else @click="ujian(row.item)">Lanjutkan Ujian</b-button>
                 </template>

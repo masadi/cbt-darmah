@@ -21,6 +21,9 @@ class UjianController extends Controller
                 }
             ])->where('ujian_id', request()->ujian_id)->where('nomor', request()->nomor)->first(),
             'ujian' => Ujian::withCount('soal')->find(request()->ujian_id),
+            'all_soal' => Soal::with(['jawaban_siswa' => function($query){
+                $query->where('user_id', $this->loggedUser()->user_id);
+            }])->where('ujian_id', request()->ujian_id)->orderBy('nomor')->get(),
         ];
         return response()->json($data);
     }
@@ -29,13 +32,14 @@ class UjianController extends Controller
     }
     public function simpan(){
         $data = NULL;
+        $jawaban_siswa = NULL;
         if(request()->jawaban){
             $jawaban = Jawaban::where(function($query){
                 $query->where('soal_id', request()->soal_id);
                 $query->where('opsi', request()->jawaban);
             })->first();
             if($jawaban){
-                $data = Jawaban_siswa::updateOrCreate(
+                $jawaban_siswa = Jawaban_siswa::updateOrCreate(
                     [
                         'user_id' => $this->loggedUser()->user_id,
                         'soal_id' => request()->soal_id,
@@ -60,21 +64,17 @@ class UjianController extends Controller
             ]
         );
         //date('H:i:s', strtotime(request()->waktu));
-        return response()->json($data);
+        return response()->json($jawaban_siswa);
     }
     public function waktu(){
         $waktu = Ujian_siswa::where(function($query){
             $query->where('ujian_id', request()->ujian_id);
             $query->where('user_id', $this->loggedUser()->user_id);
         })->first();
-        $ujian = Ujian::withCount('soal')->find(request()->ujian_id);
-        $jumlah_soal = [];
-        for($i=1;$i<=$ujian->soal_count;$i++){
-            $jumlah_soal[] = $i;
-        }
         $data = [
             'waktu' => ($waktu) ? $waktu->waktu : 120,
-            'jumlah_soal' => $jumlah_soal,
+            //'jumlah_soal' => $all_soal->count(),
+            //'all_soal' => $all_soal,
         ];
         return response()->json($data);
     }

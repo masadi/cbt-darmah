@@ -55,7 +55,52 @@ class GeneratePembelajaran extends Command
                         'mata_pelajaran_id' => 2,
                         'nama_mata_pelajaran' => 'Pendidikan Kewarganegaraan (PKn)',
                         'nuptk' => '5046766667200003',
-                    ]
+                    ],
+                    [
+                        'mata_pelajaran_id' => 3,
+                        'nama_mata_pelajaran' => 'Bahasa Indonesia',
+                        'nuptk' => '5046766667200003',
+                    ],
+                    [
+                        'mata_pelajaran_id' => 4,
+                        'nama_mata_pelajaran' => 'Bahasa Inggris',
+                        'nuptk' => '5046766667200003',
+                    ],
+                    [
+                        'mata_pelajaran_id' => 5,
+                        'nama_mata_pelajaran' => 'Bahasa Madura',
+                        'nuptk' => '5046766667200003',
+                    ],
+                    [
+                        'mata_pelajaran_id' => 6,
+                        'nama_mata_pelajaran' => 'Prakarya',
+                        'nuptk' => '5046766667200003',
+                    ],
+                    [
+                        'mata_pelajaran_id' => 7,
+                        'nama_mata_pelajaran' => 'Seni Budaya Keterampilan (SBK)',
+                        'nuptk' => '5046766667200003',
+                    ],
+                    [
+                        'mata_pelajaran_id' => 8,
+                        'nama_mata_pelajaran' => 'Pendidikan Agama Islam (PAI)',
+                        'nuptk' => '5046766667200003',
+                    ],
+                    [
+                        'mata_pelajaran_id' => 9,
+                        'nama_mata_pelajaran' => 'Sejarah Kebudayaan Islam (SKI)',
+                        'nuptk' => '5046766667200003',
+                    ],
+                    [
+                        'mata_pelajaran_id' => 10,
+                        'nama_mata_pelajaran' => 'Ilmu Pengetahuan Alam (IPA)',
+                        'nuptk' => '5046766667200003',
+                    ],
+                    [
+                        'mata_pelajaran_id' => 11,
+                        'nama_mata_pelajaran' => 'Matematika',
+                        'nuptk' => '5046766667200003',
+                    ],
                 ],
             ]
         ];

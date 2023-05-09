@@ -8,6 +8,7 @@ use App\Models\Ujian;
 use App\Models\Soal;
 use App\Models\Jawaban;
 use App\Models\Pembelajaran;
+use File;
 
 class GenerateUjian extends Command
 {
@@ -44,7 +45,16 @@ class GenerateUjian extends Command
     {
         $mapel = [
             1 => 'soal_ips', 
-            2 => 'soal_pkn'
+            2 => 'soal_pkn',
+            3 => 'soal_indo',
+            4 => 'soal_inggris',
+            5 => 'soal_madura',
+            6 => 'soal_prakarya',
+            7 => 'soal_sbk',
+            8 => 'soal_pai',
+            9 => 'soal_ski',
+            10 => 'soal_ipa',
+            11 => 'soal_mtk',
         ];
         $folder = public_path('templates');
         foreach($mapel as $mata_pelajaran_id => $file){
@@ -60,7 +70,12 @@ class GenerateUjian extends Command
                     'nama' => 'Ujian Sekolah '.$pembelajaran['nama_mata_pelajaran'],
                 ]
             );
-            $this->proses_ujian($folder, $file, $ujian);
+            if(File::exists($folder.'/'.$file.'.xlsx')){
+                $this->info($file. 'ada');
+                $this->proses_ujian($folder, $file, $ujian);
+            } else {
+                $this->error($file. 'ga ada');
+            }
         }
     }
     private function proses_ujian($folder, $file, $ujian){
@@ -122,9 +137,46 @@ class GenerateUjian extends Command
         });
     }
     private function create_deskripsi($item){
+        /*
+        1 => 'soal_ips', 
+            2 => 'soal_pkn',
+            3 => 'soal_indo',
+            4 => 'soal_inggris',
+            5 => 'soal_madura',
+            6 => 'soal_prakarya',
+            7 => 'soal_sbk',
+            8 => 'soal_pai',
+            9 => 'soal_ski',
+            10 => 'soal_ipa',
+            11 => 'soal_mtk',
+        */
         for($i=1;$i<=100;$i++){
-            $string = ['#gambar_'.$i.'_ips#', '#gambar_'.$i.'_pkn#'];
-            $gambar = ['<img src="/upload/images/gambar_'.$i.'_ips.png" />', '<img src="/upload/images/gambar_'.$i.'_pkn.png" />'];
+            $string = [
+                '#gambar_'.$i.'_ips#', 
+                '#gambar_'.$i.'_pkn#',
+                '#gambar_'.$i.'_indo#',
+                '#gambar_'.$i.'_inggris#',
+                '#gambar_'.$i.'_madura#',
+                '#gambar_'.$i.'_prakarya#',
+                '#gambar_'.$i.'_sbk#',
+                '#gambar_'.$i.'_pai#',
+                '#gambar_'.$i.'_ski#',
+                '#gambar_'.$i.'_ipa#',
+                '#gambar_'.$i.'_mtk#',
+            ];
+            $gambar = [
+                '<img src="/upload/images/gambar_'.$i.'_ips.png" />', 
+                '<img src="/upload/images/gambar_'.$i.'_pkn.png" />',
+                '<img src="/upload/images/gambar_'.$i.'_indo.png" />',
+                '<img src="/upload/images/gambar_'.$i.'_inggris.png" />',
+                '<img src="/upload/images/gambar_'.$i.'_madura.png" />',
+                '<img src="/upload/images/gambar_'.$i.'_prakarya.png" />',
+                '<img src="/upload/images/gambar_'.$i.'_sbk.png" />',
+                '<img src="/upload/images/gambar_'.$i.'_pai.png" />',
+                '<img src="/upload/images/gambar_'.$i.'_ski.png" />',
+                '<img src="/upload/images/gambar_'.$i.'_ipa.png" />',
+                '<img src="/upload/images/gambar_'.$i.'_mtk.png" />',
+            ];
             $item = str_replace($string, $gambar, $item);
         }
         return nl2br($item);
