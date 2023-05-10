@@ -121,6 +121,11 @@ class GeneratePembelajaran extends Command
                         'nama_mata_pelajaran' => 'Bahasa Arab',
                         'nuptk' => '5046766667200003',
                     ],
+                    [
+                        'mata_pelajaran_id' => 16,
+                        'nama_mata_pelajaran' => 'Pendidikan Jasmani, Olahraga, dan Kesehatan (PJOK)',
+                        'nuptk' => '5046766667200003',
+                    ],
                 ],
             ]
         ];
