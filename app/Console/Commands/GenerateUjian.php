@@ -71,10 +71,10 @@ class GenerateUjian extends Command
                 ]
             );
             if(File::exists($folder.'/'.$file.'.xlsx')){
-                $this->info($file. 'ada');
+                $this->info($file. ': ada');
                 $this->proses_ujian($folder, $file, $ujian);
             } else {
-                $this->error($file. 'ga ada');
+                $this->error($file. ': ga ada');
             }
         }
     }

@@ -101,6 +101,21 @@ class GeneratePembelajaran extends Command
                         'nama_mata_pelajaran' => 'Matematika',
                         'nuptk' => '5046766667200003',
                     ],
+                    [
+                        'mata_pelajaran_id' => 12,
+                        'nama_mata_pelajaran' => 'ASWAJA',
+                        'nuptk' => '5046766667200003',
+                    ],
+                    [
+                        'mata_pelajaran_id' => 13,
+                        'nama_mata_pelajaran' => 'Akhlaq',
+                        'nuptk' => '5046766667200003',
+                    ],
+                    [
+                        'mata_pelajaran_id' => 14,
+                        'nama_mata_pelajaran' => 'Fiqih',
+                        'nuptk' => '5046766667200003',
+                    ],
                 ],
             ]
         ];
