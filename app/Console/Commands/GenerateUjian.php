@@ -55,6 +55,9 @@ class GenerateUjian extends Command
             9 => 'soal_ski',
             10 => 'soal_ipa',
             11 => 'soal_mtk',
+            12 => 'soal_aswaja',
+            13 => 'soal_akhlaq',
+            14 => 'soal_fiqih',
         ];
         $folder = public_path('templates');
         foreach($mapel as $mata_pelajaran_id => $file){
@@ -163,6 +166,9 @@ class GenerateUjian extends Command
                 '#gambar_'.$i.'_ski#',
                 '#gambar_'.$i.'_ipa#',
                 '#gambar_'.$i.'_mtk#',
+                '#gambar_'.$i.'_aswaja#',
+                '#gambar_'.$i.'_akhlaq#',
+                '#gambar_'.$i.'_fiqih#',
             ];
             $gambar = [
                 '<img src="/upload/images/gambar_'.$i.'_ips.png" />', 
@@ -176,6 +182,9 @@ class GenerateUjian extends Command
                 '<img src="/upload/images/gambar_'.$i.'_ski.png" />',
                 '<img src="/upload/images/gambar_'.$i.'_ipa.png" />',
                 '<img src="/upload/images/gambar_'.$i.'_mtk.png" />',
+                '<img src="/upload/images/gambar_'.$i.'_aswaja.png" />',
+                '<img src="/upload/images/gambar_'.$i.'_akhlaq.png" />',
+                '<img src="/upload/images/gambar_'.$i.'_fiqih.png" />',
             ];
             $item = str_replace($string, $gambar, $item);
         }
