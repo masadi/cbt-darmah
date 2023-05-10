@@ -15,7 +15,9 @@ class UjianController extends Controller
     public function index(){
         $data = [
             'soal' => Soal::with([
-                'jawaban',
+                'jawaban' => function($query){
+                    $query->orderBy('urut');
+                },
                 'jawaban_siswa' => function($query){
                     $query->where('user_id', $this->loggedUser()->user_id);
                 }
