@@ -95,7 +95,7 @@ class GenerateUjian extends Command
                     'deskripsi' => $this->create_deskripsi($item['soal']),
                 ]
             );
-            Jawaban::where('ujian_id', $ujian->ujian_id)->delete();
+            Jawaban::where('soal_id', $soal->soal_id)->delete();
             Jawaban::updateOrCreate(
                 [
                     'soal_id' => $soal->soal_id,
