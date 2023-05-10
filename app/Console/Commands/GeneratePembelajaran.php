@@ -116,6 +116,11 @@ class GeneratePembelajaran extends Command
                         'nama_mata_pelajaran' => 'Fiqih',
                         'nuptk' => '5046766667200003',
                     ],
+                    [
+                        'mata_pelajaran_id' => 15,
+                        'nama_mata_pelajaran' => 'Bahasa Arab',
+                        'nuptk' => '5046766667200003',
+                    ],
                 ],
             ]
         ];

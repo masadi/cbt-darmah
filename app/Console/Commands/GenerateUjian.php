@@ -58,6 +58,7 @@ class GenerateUjian extends Command
             12 => 'soal_aswaja',
             13 => 'soal_akhlaq',
             14 => 'soal_fiqih',
+            15 => 'soal_arab',
         ];
         $folder = public_path('templates');
         foreach($mapel as $mata_pelajaran_id => $file){
