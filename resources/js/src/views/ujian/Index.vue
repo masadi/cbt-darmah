@@ -114,7 +114,7 @@ export default {
       soal_id: null,
       jumlah_soal: 0,
       yourEndDate: 0,
-      itemsPerRow: 5,
+      itemsPerRow: 4,
       all_soal: [],
       nav_variant: {},
     }
