@@ -81,6 +81,7 @@ class UjianController extends Controller
         return response()->json($data);
     }
     public function selesai(){
+        $this->simpan();
         $insert = Ujian_siswa::where(function($query){
             $query->where('ujian_id', request()->ujian_id);
             $query->where('user_id', $this->loggedUser()->user_id);
@@ -98,6 +99,28 @@ class UjianController extends Controller
                 'text' => 'Ujian gagal disimpan. Silahkan coba beberapa saat lagi!',
             ];
         }
+        return response()->json($data);
+    }
+    public function hasil(){
+        $ujian = Ujian::withCount([
+            'jawaban_siswa as benar' => function($query){
+                $query->where('user_id', $this->loggedUser()->user_id);
+                $query->whereHas('jawaban', function($query){
+                    $query->where('benar', 1);
+                });
+            },
+            'jawaban_siswa as salah' => function($query){
+                $query->where('user_id', $this->loggedUser()->user_id);
+                $query->whereHas('jawaban', function($query){
+                    $query->where('benar', 0);
+                });
+            }
+        ])->find(request()->ujian_id);
+        $data = [
+            'mata_ujian' => $ujian->nama,
+            'benar' => $ujian->benar,
+            'salah' => $ujian->salah,
+        ];
         return response()->json($data);
     }
 }

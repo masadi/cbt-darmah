@@ -141,6 +141,10 @@ export default {
         if (result.value) {
           this.$http.post('/ujian/selesai', {
             ujian_id: this.$route.params.ujian_id,
+            soal_id: this.soal_id,
+            jawaban: this.selected,
+            ragu: this.ragu,
+            waktu: this.yourEndDate,
           }).then(response => {
             let data = response.data
             this.$swal({
@@ -151,7 +155,8 @@ export default {
                 confirmButton: 'btn btn-success',
               },
             }).then(result => {
-              this.$router.replace('/')
+              //this.$router.replace('/')
+              this.$router.replace({ name: "hasil-ujian", params: {ujian_id:this.$route.params.ujian_id} })
             })
           });
         }

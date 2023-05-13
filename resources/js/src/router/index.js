@@ -65,6 +65,16 @@ const router = new VueRouter({
       }
     },
     {
+      path: '/hasil-ujian/:ujian_id',
+      name: 'hasil-ujian',
+      component: () => import('@/views/Ujian/Selesai.vue'),
+      meta: {
+        layout: 'horizontal',
+        resource: 'Web',
+        action: 'read',
+      }
+    },
+    {
       path: '/profile',
       name: 'profile',
       component: () => import('@/views/pages/Profile.vue'),

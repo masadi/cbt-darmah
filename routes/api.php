@@ -39,6 +39,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('simpan', [UjianController::class, 'simpan']);
     Route::post('waktu', [UjianController::class, 'waktu']);
     Route::post('selesai', [UjianController::class, 'selesai']);
+    Route::post('hasil', [UjianController::class, 'hasil']);
   });
   Route::group(['prefix' => 'dashboard'], function () {
     Route::get('index', [DashboardController::class, 'index']);
