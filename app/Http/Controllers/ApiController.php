@@ -31,7 +31,7 @@ class ApiController extends Controller
                         $query->where('peserta_didik_id', $this->loggedUser()->peserta_didik_id);
                     });
                 });
-            })->get(),
+            })->orderBy('status', 'desc')->get(),
         ];
         return response()->json($data);
     }
