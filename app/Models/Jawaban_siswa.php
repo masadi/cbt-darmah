@@ -21,4 +21,8 @@ class Jawaban_siswa extends Model
 	{
 		return $this->hasOne(Jawaban::class, 'jawaban_id', 'jawaban_id');
 	}
+	public function soal()
+	{
+		return $this->hasOne(Soal::class, 'soal_id', 'soal_id');
+	}
 }

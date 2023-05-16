@@ -36,4 +36,8 @@ class Ujian extends Model
 	{
 		return $this->hasOne(Ujian_siswa::class, 'ujian_id', 'ujian_id');
 	}
+	public function all_ujian_siswa()
+	{
+		return $this->hasMany(Ujian_siswa::class, 'ujian_id', 'ujian_id');
+	}
 }

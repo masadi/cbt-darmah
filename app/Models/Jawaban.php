@@ -13,4 +13,8 @@ class Jawaban extends Model
 	protected $table = 'jawaban';
 	protected $primaryKey = 'jawaban_id';
 	protected $guarded = [];
+	public function soal()
+	{
+		return $this->hasOne(Soal::class, 'soal_id', 'soal_id');
+	}
 }

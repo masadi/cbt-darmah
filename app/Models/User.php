@@ -63,4 +63,16 @@ class User extends Authenticatable
     {
         return $this->hasMany(User_kcd::class, 'user_id', 'user_id');
     }
+    public function jawaban_siswa()
+    {
+        return $this->hasMany(Jawaban_siswa::class, 'user_id', 'user_id');
+        return $this->hasManyThrough(
+            Jawaban_siswa::class,
+            Soal::class,
+            'ujian_id', // Foreign key on the environments table...
+            'soal_id', // Foreign key on the deployments table...
+            'ujian_id', // Local key on the projects table...
+            'soal_id' // Local key on the environments table...
+        );
+    }
 }

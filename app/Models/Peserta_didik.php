@@ -13,4 +13,21 @@ class Peserta_didik extends Model
 	protected $table = 'peserta_didik';
 	protected $primaryKey = 'peserta_didik_id';
 	protected $guarded = [];
+	
+	public function user()
+	{
+		return $this->hasOne(User::class, 'peserta_didik_id', 'peserta_didik_id');
+	}
+	public function jawaban_siswa()
+    {
+        //return $this->hasMany(Jawaban_siswa::class, 'user_id', 'user_id');
+        return $this->hasManyThrough(
+            Jawaban_siswa::class,
+            User::class,
+            'peserta_didik_id', // Foreign key on the environments table...
+            'user_id', // Foreign key on the deployments table...
+            'peserta_didik_id', // Local key on the projects table...
+            'user_id' // Local key on the environments table...
+        );
+    }
 }
