@@ -68,8 +68,8 @@ class GenerateHasil extends Command
                 });
             });
         }])->withCount([
-            'jawaban_siswa as benar' => function($query){
-                $query->whereHas('jawaban', function($query){
+            'jawaban_siswa as benar' => function($query) use ($satuan){
+                $query->whereHas('jawaban', function($query) use ($satuan){
                     $query->where('benar', 1);
                 });
                 $query->whereHas('soal', function($query) use ($satuan){
@@ -80,8 +80,8 @@ class GenerateHasil extends Command
                     });
                 });
             },
-            'jawaban_siswa as salah' => function($query){
-                $query->whereHas('jawaban', function($query){
+            'jawaban_siswa as salah' => function($query) use ($satuan){
+                $query->whereHas('jawaban', function($query) use ($satuan){
                     $query->where('benar', 0);
                 });
                 $query->whereHas('soal', function($query) use ($satuan){
