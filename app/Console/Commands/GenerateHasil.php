@@ -58,7 +58,7 @@ class GenerateHasil extends Command
                     });
                 });
             });
-        })->with(['jawaban_siswa' => function($query){
+        })->with(['jawaban_siswa' => function($query) use ($satuan){
             $query->with(['jawaban']);
             $query->whereHas('soal', function($query) use ($satuan){
                 $query->whereHas('ujian', function($query) use ($satuan){
