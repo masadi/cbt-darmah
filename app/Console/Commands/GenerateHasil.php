@@ -109,8 +109,10 @@ class GenerateHasil extends Command
                     $data[$jawaban->jawaban->soal->nomor] = $jawaban->opsi;
                     //dump($jawaban_siswa);
                 }
+                $nilai = ($pd->benar*10)/4;
                 $data['BENAR'] = $pd->benar;
                 $data['SALAH'] = $pd->salah;
+                $data['NILAI'] = number_format($nilai, 0, '.', '.');
                 $result[] = $data;
                 $i++;
             }
