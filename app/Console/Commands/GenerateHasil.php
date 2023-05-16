@@ -58,15 +58,38 @@ class GenerateHasil extends Command
                     });
                 });
             });
-        })->with(['jawaban_siswa.jawaban'])->withCount([
+        })->with(['jawaban_siswa' => function($query){
+            $query->with(['jawaban']);
+            $query->whereHas('soal', function($query) use ($satuan){
+                $query->whereHas('ujian', function($query) use ($satuan){
+                    $query->whereHas('pembelajaran', function($query) use ($satuan){
+                        $query->where('nama_mata_pelajaran', $satuan);
+                    });
+                });
+            });
+        }])->withCount([
             'jawaban_siswa as benar' => function($query){
                 $query->whereHas('jawaban', function($query){
                     $query->where('benar', 1);
+                });
+                $query->whereHas('soal', function($query) use ($satuan){
+                    $query->whereHas('ujian', function($query) use ($satuan){
+                        $query->whereHas('pembelajaran', function($query) use ($satuan){
+                            $query->where('nama_mata_pelajaran', $satuan);
+                        });
+                    });
                 });
             },
             'jawaban_siswa as salah' => function($query){
                 $query->whereHas('jawaban', function($query){
                     $query->where('benar', 0);
+                });
+                $query->whereHas('soal', function($query) use ($satuan){
+                    $query->whereHas('ujian', function($query) use ($satuan){
+                        $query->whereHas('pembelajaran', function($query) use ($satuan){
+                            $query->where('nama_mata_pelajaran', $satuan);
+                        });
+                    });
                 });
             },
         ])->orderBy('nama')->get();
