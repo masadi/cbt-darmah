@@ -114,12 +114,15 @@ export default {
     }
   },
   created() {
-    console.log('created');
-    this.$http.get('/general/index').then(response => {
-      this.isBusy = false
-      this.data = response.data
-      this.items = response.data.ujian
-    })
+    if(this.hasRole('siswa')){
+      this.$http.get('/general/index').then(response => {
+        this.isBusy = false
+        this.data = response.data
+        this.items = response.data.ujian
+      })
+    } else {
+      this.$router.replace({ name: "dashboard" })
+    }
   },
   methods: {
     ujian(item){

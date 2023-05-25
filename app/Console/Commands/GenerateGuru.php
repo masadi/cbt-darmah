@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Rap2hpoutre\FastExcel\FastExcel;
 use App\Models\Guru;
 use App\Models\User;
 use App\Models\Role;
@@ -41,20 +42,15 @@ class GenerateGuru extends Command
      */
     public function handle()
     {
-        $data = [
-            [
-                'nama' => 'Moh. Masrur',
-                'nuptk' => '5046766667200003',
-            ]
-        ];
+        $folder = public_path('templates');
         $role = Role::where('name', 'guru')->first();
-        foreach($data as $d){
+        $users = (new FastExcel)->import($folder.'/ptk.xlsx', function ($d) use ($role){
             $guru = Guru::updateOrCreate(
                 [
-                    'nama' => $d['nama'],
+                    'nuptk' => $d['nuptk']
                 ],
                 [
-                    'nuptk' => $d['nuptk']
+                    'nama' => $d['nama'],
                 ]
             );
             $user = User::updateOrCreate(
@@ -63,13 +59,14 @@ class GenerateGuru extends Command
                 ],
                 [
                     'name' => $guru->nama,
-                    'email' => $guru->nuptk.'@email.com',
-                    'password' => bcrypt('12345678')
+                    'email' => $d['email'],
+                    'password' => bcrypt('12345678'),
+                    'guru_id' => $guru->guru_id,
                 ]
             );
             if(!$user->hasRole('guru')){
                 $user->attachRole($role);
             }
-        }
+        });
     }
 }

@@ -48,7 +48,34 @@ const router = new VueRouter({
     {
       path: '/dashboard',
       name: 'dashboard',
-      component: () => import('@/views/dashboard/utama/Index.vue'),
+      component: () => import('@/views/dashboard/Index.vue'),
+      meta: {
+        resource: 'Web',
+        action: 'read',
+      }
+    },
+    {
+      path: '/rombongan-belajar',
+      name: 'rombongan-belajar',
+      component: () => import('@/views/rombongan-belajar/Index.vue'),
+      meta: {
+        resource: 'Web',
+        action: 'read',
+      }
+    },
+    {
+      path: '/bank-soal',
+      name: 'bank-soal',
+      component: () => import('@/views/bank-soal/Index.vue'),
+      meta: {
+        resource: 'Web',
+        action: 'read',
+      }
+    },
+    {
+      path: '/edit-soal/:ujian_id',
+      name: 'edit-soal',
+      component: () => import('@/views/bank-soal/Soal.vue'),
       meta: {
         resource: 'Web',
         action: 'read',

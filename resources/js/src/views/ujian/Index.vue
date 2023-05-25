@@ -65,14 +65,6 @@
                 <template v-for="article in chunk">
                   <b-col>
                     <b-button block :variant="nav_variant[article.nomor]" @click="lanjutNav(article.nomor)">{{article.nomor}}</b-button>
-                    <!--template v-if="article.jawaban_siswa">
-                      <b-button block variant="success" @click="lanjutNav(article.nomor)" v-if="parseInt(nomor) === parseInt(article.nomor)">{{article.nomor}}</b-button>
-                      <b-button block variant="primary" @click="lanjutNav(article.nomor)" v-else>{{article.nomor}}</b-button>
-                    </template>
-                    <template v-else>
-                      <b-button block variant="success" @click="lanjutNav(article.nomor)" v-if="parseInt(nomor) === parseInt(article.nomor)">{{article.nomor}}</b-button>
-                      <b-button block variant="secondary" @click="lanjutNav(article.nomor)" v-else>{{article.nomor}}</b-button>
-                    </template-->
                   </b-col>
                 </template>
               </b-row>

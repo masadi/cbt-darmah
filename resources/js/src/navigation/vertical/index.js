@@ -1,41 +1,39 @@
-/*
-
-Array of object
-
-Top level object can be:
-1. Header
-2. Group (Group can have navItems as children)
-3. navItem
-
-* Supported Options
-
-/--- Header ---/
-
-header
-
-/--- nav Grp ---/
-
-title
-icon (if it's on top level)
-tag
-tagVariant
-children
-
-/--- nav Item ---/
-
-icon (if it's on top level)
-title
-route: [route_obj/route_name] (I have to resolve name somehow from the route obj)
-tag
-tagVariant
-
-*/
-import dashboard from './dashboard'
-import appsAndPages from './apps-and-pages'
-import others from './others'
-import chartsAndMaps from './charts-and-maps'
-import uiElements from './ui-elements'
-import formAndTable from './forms-and-table'
-
-// Array of sections
-export default [...dashboard/*, ...appsAndPages, ...uiElements, ...formAndTable, ...chartsAndMaps, ...others*/]
+export default [
+    {
+      icon: 'house',
+      route: 'dashboard',
+      title: 'Beranda',
+      resource: 'Web',
+      action: 'read',
+    },
+    {
+      icon: 'layer-group',
+      route: 'bank-soal',
+      title: 'Data Ujian',
+      resource: 'Guru',
+      action: 'read',
+    },
+    {
+      icon: 'school-flag',
+      route: 'rombongan-belajar',
+      title: 'Rombongan Belajar',
+      resource: 'Administrator',
+      action: 'read',
+    },
+    {
+      icon: 'user',
+      route: 'profile',
+      title: 'Profil Pengguna',
+      resource: 'Web',
+      action: 'read',
+    },
+    {
+      icon: 'right-to-bracket',
+      route: 'logout',
+      title: 'Keluar Aplikasi',
+      resource: 'Web',
+      action: 'read',
+      variant: 'danger',
+    },
+  ]
+  
