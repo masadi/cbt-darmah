@@ -60,7 +60,7 @@ class AuthController extends Controller
     {
         $login = request()->input('email');
         $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
-        $namaField = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'Email' : 'NPSN';
+        $namaField = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'Email' : 'NISN';
         request()->merge([$field => $login]);
         $request->validate(
             [

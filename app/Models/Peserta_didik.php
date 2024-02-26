@@ -13,7 +13,16 @@ class Peserta_didik extends Model
 	protected $table = 'peserta_didik';
 	protected $primaryKey = 'peserta_didik_id';
 	protected $guarded = [];
-	
+	public function kelas(){
+        return $this->hasOneThrough(
+            Rombongan_belajar::class,
+            Anggota_rombel::class,
+            'peserta_didik_id', // Foreign key on the cars table...
+            'rombongan_belajar_id', // Foreign key on the owners table...
+            'peserta_didik_id', // Local key on the mechanics table...
+            'rombongan_belajar_id' // Local key on the cars table...
+        );
+    }
 	public function user()
 	{
 		return $this->hasOne(User::class, 'peserta_didik_id', 'peserta_didik_id');

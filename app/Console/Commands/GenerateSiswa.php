@@ -45,6 +45,7 @@ class GenerateSiswa extends Command
     {
         $folder = public_path('templates');
         $role = Role::where('name', 'siswa')->first();
+        Peserta_didik::whereNotNull('nisn')->delete();
         $users = (new FastExcel)->import($folder.'/pd.xlsx', function ($item) use ($role){
             $rombel = Rombongan_belajar::updateOrCreate([
                 'nama' => $item['kelas'],

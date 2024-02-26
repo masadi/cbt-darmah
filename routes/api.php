@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UjianController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\RombelController;
+use App\Http\Controllers\PdController;
 use App\Http\Controllers\SoalController;
 use App\Http\Controllers\MapelController;
 /*
@@ -52,6 +53,12 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/pembelajaran', [RombelController::class, 'pembelajaran']);
     Route::post('/simpan-pembelajaran', [RombelController::class, 'simpan_pembelajaran']);
     Route::post('/hapus-pembelajaran', [RombelController::class, 'hapus_pembelajaran']);
+  });
+  Route::group(['prefix' => 'peserta-didik'], function () {
+    Route::get('/', [PdController::class, 'index']);
+    Route::post('/detil', [PdController::class, 'detil']);
+    Route::post('/simpan-pembelajaran', [PdController::class, 'simpan_pembelajaran']);
+    Route::post('/hapus-pembelajaran', [PdController::class, 'hapus_pembelajaran']);
   });
   Route::group(['prefix' => 'bank-soal'], function () {
     Route::get('/', [SoalController::class, 'index']);

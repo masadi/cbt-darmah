@@ -28,10 +28,13 @@
           <strong>Loading...</strong>
         </div>
       </template>
+      <template v-slot:cell(kelas)="row">
+        {{ row.item.kelas.nama }}
+      </template>
       <template v-slot:cell(actions)="row">
         <b-dropdown id="dropdown-dropleft" dropleft text="Aksi" variant="success" size="sm">
-          <b-dropdown-item href="javascript:" @click="detil(row.item)"><font-awesome-icon icon="fa-solid fa-eye" /> Pembelajaran</b-dropdown-item>
-          <b-dropdown-item href="javascript:" @click="walas(row.item)"><font-awesome-icon icon="fa-solid fa-user" /> Wali Kelas</b-dropdown-item>
+          <b-dropdown-item href="javascript:" @click="detil(row.item)"><font-awesome-icon icon="fa-solid fa-eye" /> Detil</b-dropdown-item>
+          <!--b-dropdown-item href="javascript:" @click="walas(row.item)"><font-awesome-icon icon="fa-solid fa-user" /> Wali Kelas</b-dropdown-item-->
         </b-dropdown>
       </template>
     </b-table>
@@ -45,33 +48,8 @@
         <b-pagination v-model="meta.current_page" :total-rows="meta.total" :per-page="meta.per_page" align="right" @change="changePage" aria-controls="dw-datatable"></b-pagination>
       </b-col>
     </b-row>
-    <b-modal ref="my-modal" size="xl" :title="judul" ok-title="Simpan" cancel-title="Tutup" @ok="handleOk">
-      <form ref="form" @submit.stop.prevent="handleSubmit">
-        <table class="table table-bordered">
-          <thead>
-            <th class="text-center">NO</th>
-            <th class="text-center">Mata Pelajaran</th>
-            <th class="text-center">Guru</th>
-            <th class="text-center">Hapus</th>
-          </thead>
-          <tbody>
-            <tr v-for="(mapel, index) in pembelajaran" v-if="pembelajaran.length">
-              <td>{{index + 1}}</td>
-              <td>{{mapel.nama_mata_pelajaran}}</td>
-              <td>
-                <input type="hidden" v-model="form.pembelajaran_id[mapel.pembelajaran_id]" />
-                <b-form-select v-model="form.guru_id[mapel.pembelajaran_id]" :options="data_guru" value-field="guru_id" text-field="nama"></b-form-select>
-              </td>
-              <td>
-                <b-button variant="danger" size="sm" @click="hapus(mapel.pembelajaran_id, mapel.rombongan_belajar_id)">Hapus</b-button>
-              </td>
-            </tr>
-            <tr v-else>
-              <td class="text-center" colspan="4">Tidak ada data untuk ditampilkan</td>
-            </tr>
-          </tbody>
-        </table>
-      </form>
+    <b-modal ref="my-modal" size="xl" :title="judul" ok-only ok-title="Tutup">
+      Detil siswa
     </b-modal>
   </div>
 </template>
@@ -139,17 +117,12 @@ export default {
   methods: {
     detil(item){
       console.log(item);
-      this.$http.post('/rombongan-belajar/pembelajaran', {
-        rombongan_belajar_id: item.rombongan_belajar_id
+      this.$http.post('/peserta-didik/detil', {
+        peserta_didik_id: item.peserta_didik_id
       }).then(response => {
         let getData = response.data
-        this.pembelajaran = getData.data
-        this.pembelajaran.forEach((value, index) => {
-            this.form.pembelajaran_id[value.pembelajaran_id] = value.pembelajaran_id
-            this.form.guru_id[value.pembelajaran_id] = value.guru_id
-        });
+        console.log(getData);
         this.judul = getData.judul
-        this.data_guru = getData.guru
         this.$refs['my-modal'].show()
       });
     },

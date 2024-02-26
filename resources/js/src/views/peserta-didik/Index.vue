@@ -33,8 +33,15 @@ export default {
           thClass: 'text-center',
         },
         {
-          key: 'tingkat',
-          label: 'Tingkat',
+          key: 'nisn',
+          label: 'NISN',
+          sortable: true,
+          thClass: 'text-center',
+          tdClass: 'text-center'
+        },
+        {
+          key: 'kelas',
+          label: 'Kelas',
           sortable: true,
           thClass: 'text-center',
           tdClass: 'text-center'
@@ -52,7 +59,7 @@ export default {
       current_page: 1, //DEFAULT PAGE YANG AKTIF ADA PAGE 1
       per_page: 10, //DEFAULT LOAD PERPAGE ADALAH 10
       search: '',
-      sortBy: 'tingkat', //DEFAULT SORTNYA ADALAH CREATED_AT
+      sortBy: 'nama', //DEFAULT SORTNYA ADALAH CREATED_AT
       sortByDesc: false, //ASCEDING
     }
   },
@@ -64,7 +71,7 @@ export default {
       //let current_page = this.search == '' ? this.current_page : this.current_page != 1 ? 1 : this.current_page
       let current_page = this.current_page//this.search == '' ? this.current_page : 1
       //LAKUKAN REQUEST KE API UNTUK MENGAMBIL DATA POSTINGAN
-      this.$http.get('/rombongan-belajar', {
+      this.$http.get('/peserta-didik', {
         params: {
           page: current_page,
           per_page: this.per_page,
