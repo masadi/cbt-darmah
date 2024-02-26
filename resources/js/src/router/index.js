@@ -55,6 +55,24 @@ const router = new VueRouter({
       }
     },
     {
+      path: '/mata-pelajaran',
+      name: 'mata-pelajaran',
+      component: () => import('@/views/mata-pelajaran/Index.vue'),
+      meta: {
+        resource: 'Web',
+        action: 'read',
+      }
+    },
+    {
+      path: '/peserta-didik',
+      name: 'peserta-didik',
+      component: () => import('@/views/peserta-didik/Index.vue'),
+      meta: {
+        resource: 'Web',
+        action: 'read',
+      }
+    },
+    {
       path: '/rombongan-belajar',
       name: 'rombongan-belajar',
       component: () => import('@/views/rombongan-belajar/Index.vue'),

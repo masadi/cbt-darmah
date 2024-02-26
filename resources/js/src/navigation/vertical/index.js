@@ -14,6 +14,20 @@ export default [
       action: 'read',
     },
     {
+      icon: 'list-check',
+      route: 'mata-pelajaran',
+      title: 'Mata Pelajaran',
+      resource: 'Administrator',
+      action: 'read',
+    },
+    {
+      icon: 'users',
+      route: 'peserta-didik',
+      title: 'Peserta Didik',
+      resource: 'Administrator',
+      action: 'read',
+    },
+    {
       icon: 'school-flag',
       route: 'rombongan-belajar',
       title: 'Rombongan Belajar',

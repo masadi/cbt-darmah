@@ -8,6 +8,7 @@ use App\Http\Controllers\UjianController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\RombelController;
 use App\Http\Controllers\SoalController;
+use App\Http\Controllers\MapelController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -40,6 +41,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
   });
   Route::group(['prefix' => 'dashboard'], function () {
     Route::get('/', [DashboardController::class, 'index']);
+  });
+  Route::group(['prefix' => 'mata-pelajaran'], function () {
+    Route::get('/', [MapelController::class, 'index']);
+    Route::post('/simpan', [MapelController::class, 'simpan']);
+    Route::post('/update', [MapelController::class, 'update']);
   });
   Route::group(['prefix' => 'rombongan-belajar'], function () {
     Route::get('/', [RombelController::class, 'index']);
