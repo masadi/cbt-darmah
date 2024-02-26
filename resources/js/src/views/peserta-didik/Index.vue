@@ -2,7 +2,7 @@
   <b-card no-body>
     <b-card-header>
       <b-card-title>
-        <h2>Data Rombongan Belajar</h2>
+        <h2>Data Peserta Didik</h2>
       </b-card-title>
     </b-card-header>
     <b-card-body>
