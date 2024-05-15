@@ -38,7 +38,10 @@ class ResetUjian extends Command
      */
     public function handle()
     {
-        $data = Ujian_siswa::where('ujian_id', 'f7d601de-ba75-4a0e-ac60-8fbb2a450b61')->where('user_id', '2b3e506f-9960-416c-a804-5cdf54d5f91f')->get();
-        dd($data);
+        $data = Ujian_siswa::where('ujian_id', 'f7d601de-ba75-4a0e-ac60-8fbb2a450b61')->where('user_id', '2b3e506f-9960-416c-a804-5cdf54d5f91f')->first();
+        if($data){
+            $data->status = 0;
+            $data->save();
+        }
     }
 }
