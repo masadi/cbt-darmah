@@ -85,5 +85,16 @@ class GenerateSiswa extends Command
                 $user->attachRole($role);
             }
         });
+        $role = Role::where('name', 'administrator')->first();
+        $user = User::updateOrCreate(
+            [
+                'name' => 'administrator',
+                'email' => 'administrator@gmail.com',
+            ],
+            [
+                'password' => bcrypt('12345678'),
+            ]
+        );
+        $user->attachRole($role);
     }
 }
