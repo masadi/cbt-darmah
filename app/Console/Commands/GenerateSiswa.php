@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Rap2hpoutre\FastExcel\FastExcel;
 use App\Models\User;
 use App\Models\Peserta_didik;
@@ -43,6 +44,7 @@ class GenerateSiswa extends Command
      */
     public function handle()
     {
+        DB::table('peserta_didik')->truncate();
         $folder = public_path('templates');
         $role = Role::where('name', 'siswa')->first();
         Peserta_didik::whereNotNull('nisn')->delete();

@@ -172,6 +172,7 @@ class GenerateUjian extends Command
                 '#gambar_'.$i.'_aswaja#',
                 '#gambar_'.$i.'_akhlaq#',
                 '#gambar_'.$i.'_fiqih#',
+                '#gambar_'.$i.'_pjok#',
             ];
             $gambar = [
                 '<img src="/upload/images/gambar_'.$i.'_ips.png" class="img-fluid" />', 
@@ -188,6 +189,7 @@ class GenerateUjian extends Command
                 '<img src="/upload/images/gambar_'.$i.'_aswaja.png" class="img-fluid"  />', 
                 '<img src="/upload/images/gambar_'.$i.'_akhlaq.png" class="img-fluid"  />', 
                 '<img src="/upload/images/gambar_'.$i.'_fiqih.png" class="img-fluid"  />', 
+                '<img src="/upload/images/gambar_'.$i.'_pjok.png" class="img-fluid"  />', 
             ];
             $item = str_replace($string, $gambar, $item);
         }

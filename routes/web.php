@@ -5,6 +5,7 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\CetakController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\WordController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,5 +25,6 @@ Route::group(['prefix' => 'cetak'], function () {
 Route::group(['prefix' => 'downloads'], function () {
     Route::get('/template-excel/{sekolah_id}', [DownloadController::class, 'template_excel']);
 });
+Route::get('/word', [WordController::class, 'index']);
 //Route::get('/auth/sso', [AuthController::class, 'sso']);
 Route::get('/{any}', [ApplicationController::class, 'index'])->where('any', '.*');
