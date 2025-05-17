@@ -60,26 +60,30 @@ class GenerateUjian extends Command
             14 => 'soal_fiqih',
             15 => 'soal_arab',
             16 => 'soal_pjok',
+            17 => 'soal_simulasi',
         ];
         $folder = public_path('templates');
         foreach($mapel as $mata_pelajaran_id => $file){
             $pembelajaran = Pembelajaran::where('mata_pelajaran_id', $mata_pelajaran_id)->whereHas('rombongan_belajar', function($query){
                 $query->where('tingkat', 9);
             })->first();
-            $ujian = Ujian::updateOrCreate(
-                [
-                    'pembelajaran_id' => $pembelajaran->pembelajaran_id,
-                    'status' => 1,
-                ],
-                [
-                    'nama' => 'Ujian Sekolah '.$pembelajaran['nama_mata_pelajaran'],
-                ]
-            );
-            if(File::exists($folder.'/'.$file.'.xlsx')){
-                $this->info($file. ': ada');
-                $this->proses_ujian($folder, $file, $ujian);
-            } else {
-                $this->error($file. ': ga ada');
+            $find = Ujian::where('pembelajaran_id', $pembelajaran->pembelajaran_id)->first();
+            if(!$find){
+                $ujian = Ujian::updateOrCreate(
+                    [
+                        'pembelajaran_id' => $pembelajaran->pembelajaran_id,
+                        'status' => 0,
+                    ],
+                    [
+                        'nama' => 'Ujian Sekolah '.$pembelajaran['nama_mata_pelajaran'],
+                    ]
+                );
+                if(File::exists($folder.'/'.$file.'.xlsx')){
+                    $this->info($file. ': ada');
+                    $this->proses_ujian($folder, $file, $ujian);
+                } else {
+                    $this->error($file. ': ga ada');
+                }
             }
         }
     }

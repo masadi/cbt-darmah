@@ -23,7 +23,7 @@
       <b-col cols="8" v-else>
         <b-card>
           <b-card-text>
-            <h2 class="mb-2">Nomor Soal: {{nomor}}</h2>
+            <h2 class="mb-2">Nomor Soal: {{no_aktif}}</h2>
             <h4 v-html="data.deskripsi"></h4>
             <b-form-group v-slot="{ ariaDescribedby }" class="mt-2">
               <template v-for="(jawaban, index) in data.jawaban">
@@ -32,8 +32,8 @@
             </b-form-group>
             <b-row>
               <b-col lg="4">
-                <b-button v-if="nomor <= 1">&laquo; Sebelumnya</b-button>
-                <b-button v-else @click="lanjut(data.soal_id, nomor, 'prev')" variant="success">&laquo; Sebelumnya</b-button>
+                <b-button v-if="no_aktif <= 1">&laquo; Sebelumnya</b-button>
+                <b-button v-else @click="lanjut(data.soal_id, prev_id, no_aktif, 'prev')" variant="success">&laquo; Sebelumnya</b-button>
               </b-col>
               <b-col lg="4" class="text-center">
                 <b-form-checkbox v-model="ragu" name="check-button" button :button-variant="button_ragu" @change="getRagu">
@@ -41,8 +41,8 @@
                 </b-form-checkbox>
               </b-col>
               <b-col lg="4" class="text-right">
-                <b-button v-if="nomor == jumlah_soal" variant="danger" @click="selesai">Selesai</b-button>
-                <b-button v-else @click="lanjut(data.soal_id, nomor, 'next')" variant="success">Selanjutnya &raquo;</b-button>
+                <b-button v-if="no_aktif == jumlah_soal" variant="danger" @click="selesai">Selesai</b-button>
+                <b-button v-else @click="lanjut(data.soal_id, next_id, no_aktif, 'next')" variant="success">Selanjutnya &raquo;</b-button>
               </b-col>
             </b-row>
           </b-card-text>
@@ -60,11 +60,11 @@
         <b-card>
           <b-card-text>
             <h2 class="mb-2">Navigasi Soal</h2>
-            <template v-for="chunk in chunked()">
+            <template v-for="induk in pecahan">
               <b-row class="mb-1">
-                <template v-for="article in chunk">
+                <template v-for="anak in induk">
                   <b-col>
-                    <b-button block :variant="nav_variant[article.nomor]" @click="lanjutNav(article.nomor)">{{article.nomor}}</b-button>
+                    <b-button block :variant="nav_variant[anak.no]" @click="lanjutNav(anak.soal_id, anak.no)">{{anak.no}}</b-button>
                   </b-col>
                 </template>
               </b-row>
@@ -109,13 +109,122 @@ export default {
       itemsPerRow: 4,
       all_soal: [],
       nav_variant: {},
+      no_aktif: 0,
+      pecahan: [],
+      prev_id: null,
+      next_id: null,
     }
   },
   created() {
     this.getwaktu(this.$route.params.ujian_id)
-    this.getSoal(this.$route.params.ujian_id, this.$route.query.nomor, false)
+    this.getSemuaSoal(this.$route.params.ujian_id);
   },
   methods: {
+    iterateInChunks(array, chunkSize, callback) {
+      for (let i = 0; i < array.length; i += chunkSize) {
+        const chunk = array.slice(i, i + chunkSize);
+        callback(chunk, i);
+      }
+    },
+    getSemuaSoal(ujian_id){
+      this.$http.post('/ujian/semua-soal', {
+        ujian_id: ujian_id,
+      }).then(response => {
+        let getData = response.data
+        this.all_soal = getData
+        let kurangi = this.$route.query.nomor - 1
+        this.getSoal(getData[kurangi].soal_id, this.$route.query.nomor)
+        this.jumlah_soal = getData.length
+        let numbers = []
+        for (var i = 0; i < getData.length; i++) {
+          let ite = i + 1;
+          numbers.push({
+            no: ite,
+            soal_id: getData[i].soal_id
+          })
+        }
+        this.iterateInChunks(numbers, this.itemsPerRow, (chunk, index) => {
+          this.pecahan.push(chunk)
+        });
+      });
+    },
+    chunked () {
+      return _.chunk(this.all_soal, this.itemsPerRow)
+    },
+    
+    getSoal(soal_id, no_aktif){
+      this.$http.post('/ujian/soal', {
+        soal_id: soal_id,
+      }).then(response => {
+        let getData = response.data
+        this.data = getData.soal
+        this.ujian_id = getData.soal.ujian_id
+        this.soal_id = getData.soal.soal_id
+        this.no_aktif = no_aktif;
+        this.isBusy = false
+        this.loading = false
+        let index = this.all_soal.findIndex(x => x.soal_id === soal_id);
+        if(index >= 0 && index < (this.all_soal.length - 1)){
+          this.next_id = this.all_soal[index + 1].soal_id
+        }
+        if(index > 0){
+          this.prev_id = this.all_soal[index - 1].soal_id
+        }
+        this.selected = ''
+        this.ragu = false
+        this.button_ragu = 'secondary'
+        if(getData.soal.jawaban_siswa){
+          this.selected = getData.soal.jawaban_siswa.opsi
+          this.ragu = (getData.soal.jawaban_siswa.is_ragu) ? true : false
+          this.button_ragu = (getData.soal.jawaban_siswa.is_ragu) ? 'warning' : 'secondary'
+        }
+        this.all_soal.forEach((value, index) => {
+          let nomor_soal = index + 1;
+          this.nav_variant[nomor_soal] = 'secondary'
+        })
+        getData.jawaban_siswa.forEach((value, index) => {
+          console.log(value);
+          let indexJawaban = this.all_soal.findIndex(x => x.soal_id === value.soal_id);
+          let nomor_soal = indexJawaban + 1;
+          if(value.is_ragu){
+            this.nav_variant[nomor_soal] = 'warning'
+          } else {
+            this.nav_variant[nomor_soal] = 'primary'
+          }
+          console.log(indexJawaban);
+          
+          /*if(value.jawaban_siswa.is_ragu){
+            this.nav_variant[nomor_soal] = 'warning'
+          } else {
+            this.nav_variant[nomor_soal] = 'primary'
+          }*/
+        })
+        let nomor_soal = index + 1;
+        if(parseInt(no_aktif) === parseInt(nomor_soal)){
+          this.nav_variant[nomor_soal] = 'success'
+        }
+        /*this.all_soal.forEach((value, index) => {
+          let nomor_soal = index + 1;
+          if(value.jawaban_siswa){
+            if(parseInt(no_aktif) === parseInt(nomor_soal)){
+                this.nav_variant[nomor_soal] = 'success'
+            } else {
+              if(value.jawaban_siswa.is_ragu){
+                this.nav_variant[nomor_soal] = 'warning'
+              } else {
+                this.nav_variant[nomor_soal] = 'primary'
+              }
+            }
+          } else {
+            if(parseInt(no_aktif) === parseInt(nomor_soal)){
+              this.nav_variant[nomor_soal] = 'success'
+            } else {
+              this.nav_variant[nomor_soal] = 'secondary'
+            }
+          }
+        })*/
+      });
+    },
     selesai(){
       this.$swal({
         title: 'Apakah Anda yakin?',
@@ -166,9 +275,6 @@ export default {
         }
       })
     },
-    chunked () {
-      return _.chunk(this.all_soal, this.itemsPerRow)
-    },
     setDate(d){
       const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
       let month = months[d.getMonth()];
@@ -179,7 +285,7 @@ export default {
       let s = d.getSeconds();
       return month+' '+day+', '+ year+' '+h+':'+i+':'+s
     },
-    getSoal(ujian_id, nomor, replace){
+    getSoalOld(ujian_id, nomor, replace){
       this.selected = ''
       this.ragu = false
       this.button_ragu = 'secondary'
@@ -196,7 +302,6 @@ export default {
         this.soal_id = getData.soal.soal_id
         this.jumlah_soal = getData.ujian.soal_count
         if(getData.soal.jawaban_siswa){
-          console.log(getData.soal.jawaban_siswa.is_ragu);
           this.selected = getData.soal.jawaban_siswa.opsi
           this.ragu = (getData.soal.jawaban_siswa.is_ragu) ? true : false
           this.button_ragu = (getData.soal.jawaban_siswa.is_ragu) ? 'warning' : 'secondary'
@@ -220,15 +325,13 @@ export default {
               this.nav_variant[value.nomor] = 'secondary'
             }
           }
-          console.log(parseInt(nomor));
-          console.log(parseInt(value.nomor));
         })
         if(replace){
           this.$router.replace({ name: "ujian", params: {ujian_id:this.$route.params.ujian_id}, query: {nomor: nomor} })
         }
       })
     },
-    lanjutNav(nomor_ujian){
+    lanjutNav(soal_id, nomor_ujian){
       this.loading = true
       this.$http.post('/ujian/simpan', {
         ujian_id: this.ujian_id,
@@ -237,10 +340,11 @@ export default {
         ragu: this.ragu,
         waktu: this.yourEndDate,
       }).then(response => {
-        this.getSoal(this.$route.params.ujian_id, nomor_ujian, true)
+        this.getSoal(soal_id, nomor_ujian, true)
+        this.$router.push({ name: "ujian", params: {ujian_id:this.$route.params.ujian_id}, query: { nomor: nomor_ujian } })
       })
     },
-    lanjut(soal_id, nomor, nav){
+    lanjut(soal_id, new_soal_id, nomor, nav){
       this.loading = true
       var nomor_ujian;
       if(nav == 'prev'){
@@ -255,7 +359,8 @@ export default {
         ragu: this.ragu,
         waktu: this.yourEndDate,
       }).then(response => {
-        this.getSoal(this.$route.params.ujian_id, nomor_ujian, true)
+        this.getSoal(new_soal_id, nomor_ujian, true)
+        this.$router.push({ name: "ujian", params: {ujian_id:this.$route.params.ujian_id}, query: { nomor: nomor_ujian } })
       })
     },
     getRagu(val){

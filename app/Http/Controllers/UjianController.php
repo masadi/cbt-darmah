@@ -9,10 +9,14 @@ use App\Models\Jawaban;
 use App\Models\Jawaban_siswa;
 use App\Models\Ujian_siswa;
 use Carbon\Carbon;
+use Storage;
 
 class UjianController extends Controller
 {
     public function index(){
+        //$random = $collection->random(3);
+        //$random->all();
+        $jumlah = Soal::where('ujian_id', request()->ujian_id)->count();
         $data = [
             'soal' => Soal::with([
                 'jawaban' => function($query){
@@ -25,7 +29,35 @@ class UjianController extends Controller
             'ujian' => Ujian::withCount('soal')->find(request()->ujian_id),
             'all_soal' => Soal::with(['jawaban_siswa' => function($query){
                 $query->where('user_id', $this->loggedUser()->user_id);
-            }])->where('ujian_id', request()->ujian_id)->orderBy('nomor')->get(),
+            }])->where('ujian_id', request()->ujian_id)->inRandomOrder()->get(),
+        ];
+        return response()->json($data);
+    }
+    public function semua_soal(){
+        $file = request()->ujian_id.'-'.$this->loggedUser()->user_id.'.json';
+        if(Storage::disk('public')->exists($file)){
+            $data = json_decode(Storage::disk('public')->get($file));
+        } else {
+            $data = Soal::with(['jawaban_siswa' => function($query){
+                $query->where('user_id', $this->loggedUser()->user_id);
+            }])->where('ujian_id', request()->ujian_id)->inRandomOrder()->get();
+            Storage::disk('public')->put($file, json_encode($data, JSON_PRETTY_PRINT));
+        }
+        return response()->json($data);
+    }
+    public function soal(){
+        $soal = Soal::with(['jawaban', 'jawaban_siswa' => function($query){
+            $query->where('user_id', $this->loggedUser()->user_id);
+        }])->find(request()->soal_id);
+        $file = 'jawaban'.$soal->ujian_id.'-'.$this->loggedUser()->user_id.'.json';
+        if(Storage::disk('public')->exists($file)){
+            $jawaban_siswa = json_decode(Storage::disk('public')->get($file));
+        } else {
+            $jawaban_siswa = [];
+        }
+        $data = [
+            'soal' => $soal,
+            'jawaban_siswa' => $jawaban_siswa,
         ];
         return response()->json($data);
     }
@@ -33,6 +65,7 @@ class UjianController extends Controller
         return auth()->user();
     }
     public function simpan(){
+        $file = 'jawaban'.request()->ujian_id.'-'.$this->loggedUser()->user_id.'.json';
         $data = NULL;
         $jawaban_siswa = NULL;
         if(request()->jawaban){
@@ -52,6 +85,20 @@ class UjianController extends Controller
                         'is_ragu' => (request()->ragu) ? 1 : 0
                     ]
                 );
+                if(Storage::disk('public')->exists($file)){
+                    $get = json_decode(Storage::disk('public')->get($file));
+                    $collection = collect($get);
+                    $filtered = $collection->reject(function ($value, $key) {
+                        return $value->soal_id == request()->soal_id;
+                    });
+                    $collection = collect($filtered->all());
+                    $collection->push($jawaban_siswa);
+                    $unique = $collection->unique('soal_id');
+                    Storage::disk('public')->put($file, json_encode($unique->values()->all(), JSON_PRETTY_PRINT));
+                } else {
+                    Storage::disk('public')->put($file, json_encode([$jawaban_siswa], JSON_PRETTY_PRINT));
+                }
+                //Storage::disk('public')->put($this->loggedUser()->user_id.'/'.request()->soal_id.'.json', json_encode($jawaban_siswa, JSON_PRETTY_PRINT));
             }
         }
         $actual_start_at = Carbon::now()->format('H:i:s');
