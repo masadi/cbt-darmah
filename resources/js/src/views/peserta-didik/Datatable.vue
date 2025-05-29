@@ -34,7 +34,7 @@
       <template v-slot:cell(actions)="row">
         <b-dropdown id="dropdown-dropleft" dropleft text="Aksi" variant="success" size="sm">
           <b-dropdown-item href="javascript:" @click="detil(row.item)"><font-awesome-icon icon="fa-solid fa-eye" /> Detil</b-dropdown-item>
-          <!--b-dropdown-item href="javascript:" @click="walas(row.item)"><font-awesome-icon icon="fa-solid fa-user" /> Wali Kelas</b-dropdown-item-->
+          <b-dropdown-item href="javascript:" @click="nilai(row.item)"><font-awesome-icon icon="fa-solid fa-download" /> Unduh Nilai</b-dropdown-item>
         </b-dropdown>
       </template>
     </b-table>
@@ -222,6 +222,9 @@ export default {
     search: _.debounce(function (e) {
       this.$emit('search', e.target.value)
     }, 500),
+    nilai(item){
+      this.$emit('nilai', item.peserta_didik_id)
+    },
   },
 }
 </script>

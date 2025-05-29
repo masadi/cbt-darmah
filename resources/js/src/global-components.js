@@ -44,7 +44,8 @@ import {
     faMagnifyingGlass,
     faBoltLightning,
     faUserLock,
-    faTicket
+    faTicket,
+    faDownload
 } from '@fortawesome/free-solid-svg-icons'
 library.add(
     faHouse, 
@@ -84,5 +85,6 @@ library.add(
     faMagnifyingGlass,
     faBoltLightning,
     faUserLock,
-    faTicket
+    faTicket,
+    faDownload,
 )

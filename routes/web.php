@@ -24,6 +24,7 @@ Route::group(['prefix' => 'cetak'], function () {
 });
 Route::group(['prefix' => 'downloads'], function () {
     Route::get('/template-excel/{sekolah_id}', [DownloadController::class, 'template_excel']);
+    Route::get('/nilai/{peserta_didik_id}/{mata_pelajaran_id}', [DownloadController::class, 'nilai']);
 });
 Route::get('/word', [WordController::class, 'index']);
 //Route::get('/auth/sso', [AuthController::class, 'sso']);

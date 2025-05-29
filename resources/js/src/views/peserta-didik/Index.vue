@@ -6,13 +6,24 @@
       </b-card-title>
     </b-card-header>
     <b-card-body>
-      <datatable :isBusy="isBusy" :items="items" :fields="fields" :meta="meta" @per_page="handlePerPage" @pagination="handlePagination" @search="handleSearch" @sort="handleSort" />
+      <datatable :isBusy="isBusy" :items="items" :fields="fields" :meta="meta" @per_page="handlePerPage" @pagination="handlePagination" @search="handleSearch" @sort="handleSort" @nilai="handleNilai" />
     </b-card-body>
+    <b-modal title="Unduh Nilai" v-model="modalShow" @hidden="resetModal" @ok="handleOk" ok-title="Unduh">
+      <b-form-select v-model="mata_pelajaran_id" :options="mapel" text-field="nama" value-field="mata_pelajaran_id" @change="changeMapel">
+        <template #first>
+          <b-form-select-option :value="null" disabled>-- Pilih Mata Pelajaran --</b-form-select-option>
+        </template>
+      </b-form-select>
+      <template #modal-footer="{ ok, cancel }">
+        <b-button variant="danger" @click="cancel()">Batal</b-button>
+        <b-button variant="success" @click="ok()" :disabled="isDisabled">Unduh</b-button>
+      </template>
+    </b-modal>
   </b-card>
 </template>
 
 <script>
-import { BCard, BCardHeader, BCardTitle, BCardBody } from 'bootstrap-vue'
+import { BCard, BCardHeader, BCardTitle, BCardBody, BFormSelect, BButton, BFormSelectOption } from 'bootstrap-vue'
 import Datatable from './Datatable.vue' //IMPORT COMPONENT DATATABLENYA
 export default {
   components: {
@@ -20,10 +31,15 @@ export default {
     BCardHeader,
     BCardTitle,
     BCardBody,
-    Datatable
+    Datatable,
+    BFormSelect,
+    BButton,
+    BFormSelectOption,
   },
   data() {
     return {
+      isDisabled: true,
+      modalShow: false,
       isBusy: true,
       fields: [
         {
@@ -61,12 +77,19 @@ export default {
       search: '',
       sortBy: 'nama', //DEFAULT SORTNYA ADALAH CREATED_AT
       sortByDesc: false, //ASCEDING
+      peserta_didik_id: null,
+      mata_pelajaran_id: null,
+      mapel: [],
     }
   },
   created() {
     this.loadPostsData()
   },
   methods: {
+    resetModal(){
+      this.peserta_didik_id = null
+      this.mata_pelajaran_id = null
+    },
     loadPostsData() {
       //let current_page = this.search == '' ? this.current_page : this.current_page != 1 ? 1 : this.current_page
       let current_page = this.current_page//this.search == '' ? this.current_page : 1
@@ -82,6 +105,7 @@ export default {
       }).then(response => {
         //this.items = response.data.all_pd
         let getData = response.data.data
+        this.mapel = response.data.mapel
         this.isBusy = false
         this.items = getData.data//MAKA ASSIGN DATA POSTINGAN KE DALAM VARIABLE ITEMS
         //DAN ASSIGN INFORMASI LAINNYA KE DALAM VARIABLE META
@@ -117,6 +141,25 @@ export default {
         this.loadPostsData() //DAN LOAD DATA BARU BERDASARKAN SORT
       }
     },
+    handleNilai(val){
+      console.log(val);
+      this.peserta_didik_id = val
+      this.modalShow = true
+    },
+    handleOk(bvModalEvent){
+      bvModalEvent.preventDefault()
+      this.handleSubmit()
+    },
+    handleSubmit(){
+      this.modalShow = false
+      window.open(`/downloads/nilai/${this.peserta_didik_id}/${this.mata_pelajaran_id}`, '_blank')
+    },
+    changeMapel(val){
+      this.isDisabled = true
+      if(val){
+        this.isDisabled = false
+      }
+    }
   },
 }
 </script>
